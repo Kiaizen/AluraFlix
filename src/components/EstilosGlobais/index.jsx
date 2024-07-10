@@ -73,6 +73,19 @@ table {
 body{
 	background-color:rgba(0, 0, 0, 0.9);
 }
+::-webkit-scrollbar{
+	width: 10px;
+}
+::-webkit-scrollbar-thumb{
+	background-color:rgba(34, 113, 209, 1);
+	border-radius:100vw;
+}
+::-webkit-scrollbar-track{
+	border-radius:100vw;
+	background-color:rgba(34, 113, 209, 0.17);
+	margin: 5px;
+}
+
 `
 
 export default EstilosGlobais

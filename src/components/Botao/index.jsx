@@ -3,7 +3,7 @@ import styled from "styled-components"
 const BotaoStyled = styled.button`
     width: 180.13px;
     height:54px;
-    background-color: ${props=>props.$selected? 'rgba(0, 0, 0, 0.9)' : 'transparent'};
+    background-color: ${props=>props.$selected?'rgba(0, 0, 0, 0.9)'  : 'transparent'};
     border: 2px solid;
     border-color: ${props=>props.$selected? 'rgba(32,113,209,1)' : '#f5f5f5'};
     border-radius: 15px;

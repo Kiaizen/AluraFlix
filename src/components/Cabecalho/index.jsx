@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/Logo.svg";
 import styled from "styled-components";
 import Botao from "../Botao";
@@ -26,6 +26,8 @@ const Header = styled.header`
 `
 
 const Cabecalho = () => {
+    const location = useLocation();
+    const rotaAtual = location.pathname;
   return (
     <Header>
       <img src={logo} alt="Logo AluraFlix" />
@@ -33,12 +35,12 @@ const Cabecalho = () => {
         <ul>
           <li>
             <Link to={'/'}>
-                <Botao selected={true}>HOME</Botao>
+                <Botao selected={rotaAtual === '/'} >HOME</Botao>
             </Link>
           </li>
           <li>
             <Link to={'NovoVideo'}>
-                <Botao>NOVO VíDEO</Botao>
+                <Botao selected={rotaAtual === '/NovoVideo'}>NOVO VíDEO</Botao>
             </Link>
           </li>
         </ul>

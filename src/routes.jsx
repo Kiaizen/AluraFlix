@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import Inicio from "./paginas/Inicio"
 import NovoVideo from "./paginas/NovoVideo"
 import PaginaBase from "./paginas/PaginaBase"
+import Home from "./paginas/Home"
 
 
 const AppRoutes = () => {
@@ -9,7 +9,7 @@ const AppRoutes = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<PaginaBase/>} >
-                <Route index element={<Inicio/>} />
+                <Route index element={<Home/>} />
                 <Route path="NovoVideo" element={<NovoVideo/>} />
                 </Route>
             </Routes>
