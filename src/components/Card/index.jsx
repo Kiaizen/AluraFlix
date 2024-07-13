@@ -3,12 +3,20 @@ import styled from "styled-components";
 import Form from "../Form";
 import { useVideoContext } from "../../context";
 
+const StyledFigure = styled.figure`
+  margin-bottom:20px;
+`
 const StyledImg = styled.img`
   width: 432px;
+  height:260px;
   border: 4px solid ${(props) => props.$color};
   border-radius: 4px 4px 0 0;
   box-sizing: border-box;
   box-shadow: inset 0 0 17px 8px ${(props) => props.$color};
+  cursor:pointer;
+  @media (max-width:768px) {
+    width:370px;
+  }
 `;
 
 const StyledFigcaption = styled.figcaption`
@@ -64,22 +72,30 @@ const StyledDialog = styled.dialog`
     text-align: center;
     color: rgba(34, 113, 209, 1);
   }
+  @media (max-width:768px){
+    width:370px;
+  }
 `;
 
-
-
 const Card = ({ video, color }) => {
-  const { selecionarVideo } = useVideoContext();
+  const { selecionarVideo, editarVideoSelecionado, aoDeletar } = useVideoContext();
   const dialogRef = useRef();
+  const editarVideo = () => {
+    dialogRef.current?.showModal();
+    editarVideoSelecionado(video);
+  }
+  const deletarVideo = ()=>{
+    aoDeletar(video.id)
+  }
   return (
-    <figure>
+    <StyledFigure>
       <StyledImg $color={color} src={video.imagem} alt={video.titulo} onClick={()=>selecionarVideo(video)}/>
       <StyledFigcaption $color={color}>
-        <StyledButton>
+        <StyledButton onClick={deletarVideo}>
           <img src="/Lixeira.png" alt="Lixeira" />
           DELETAR
         </StyledButton>
-        <StyledButton onClick={() => dialogRef.current?.showModal()}>
+        <StyledButton onClick={editarVideo}>
           <img src="/Lapiz.png" alt="Lapiz" />
           EDITAR
         </StyledButton>
@@ -90,9 +106,9 @@ const Card = ({ video, color }) => {
           <img src="/cross.png" alt="" />
         </StyledButton>
         </StyledDiv>
-          <Form/>
+          <Form video={video}/>
       </StyledDialog>
-    </figure>
+    </StyledFigure>
   );
 };
 

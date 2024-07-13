@@ -23,6 +23,9 @@ const Header = styled.header`
         display: flex;
         gap: 25px;
     }
+    @media (max-width:768px){
+      display:none;
+    }
 `
 
 const Cabecalho = () => {

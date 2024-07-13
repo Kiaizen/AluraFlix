@@ -18,9 +18,9 @@ const StyledBtn = styled.button`
     }
 `
 
-const BotaoDialog = ({children}) => {
+const BotaoDialog = ({children, type, onClick}) => {
     return(
-        <StyledBtn>{children}</StyledBtn>
+        <StyledBtn type={type} onClick={onClick}>{children}</StyledBtn>
     )
 }
 

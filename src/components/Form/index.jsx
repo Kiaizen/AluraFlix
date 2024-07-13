@@ -3,6 +3,7 @@ import CampoSelect from "../CampoSelect"
 import CampoTextArea from "../CampoTextArea"
 import BotaoDialog from "../BotaoDialog"
 import styled from "styled-components";
+import { useVideoContext } from "../../context";
 
 const StyledForm = styled.form`
   margin: 0 200px 80px;
@@ -27,17 +28,65 @@ const StyledForm = styled.form`
         border-color:rgba(34, 113, 209, 1);
     }
   }
+  @media (max-width:1280px){
+    margin:auto;
+    max-width:600px;
+    h1{
+      text-align: start;
+    }
+  }
+  @media (max-width:768px){
+    max-width:350px;
+    h1{
+      font-size:32px;
+      text-align:center;
+      white-space:nowrap;
+      width:100%;
+      margin-bottom: 40px;
+    }
+    input{
+      width:350px;
+    }
+    textarea{
+      width:350px;
+    }
+  }
+  @media (max-width:768px){
+        div{
+          select{
+            width:350px;
+          }
+        }
+    }
 `;
 const BtnDiv = styled.section`
     display:flex;
     flex-direction: row;
     justify-content:space-between;
     width:573px;
+    @media (max-width:768px){
+      flex-direction:column;
+      align-items: center;
+      width:auto;
+      gap:20px;
+    }
 `
 
 const Form = () => {
+  const {form2, atualizarVideo} = useVideoContext();
+
+
+  const aoSubmit = (e) => {
+    e.preventDefault();
+    atualizarVideo(form2);
+  };
+  const limpar = (e) =>{
+    console.log('uée');
+    e.preventDefault();
+    form2.aoLimpar();
+  }
     return(
-        <StyledForm method="dialog">
+        <StyledForm onSubmit={aoSubmit}>
           <h1>EDITAR CARD:</h1>
           <Campo
             label="Título"
@@ -45,14 +94,20 @@ const Form = () => {
             type="text"
             placeholder="Digite seu título"
             width="573px"
+            value={form2.inputs.titulo}
+            onChange={form2.aoMudar}
+            erros={form2.errors.titulo}
           />
-          <CampoSelect />
+          <CampoSelect name="select" value={form2.inputs.select} onChange={form2.aoMudar} erros={form2.errors.select}/>
           <Campo
             label="Imagem"
             name='imagem'
             type="text"
             placeholder="Digite o link da imagem"
             width="573px"
+            value={form2.inputs.imagem}
+            onChange={form2.aoMudar}
+            erros={form2.errors.imagem}
           />
           <Campo
             label="Vídeo"
@@ -60,11 +115,14 @@ const Form = () => {
             type="text"
             placeholder="Digite o link do vídeo"
             width="573px"
+            value={form2.inputs.video}
+            onChange={form2.aoMudar}
+            erros={form2.errors.video}
           />
-          <CampoTextArea />
+          <CampoTextArea name ="descri" value={form2.inputs.descri} onChange={form2.aoMudar} erros={form2.errors.descri}/>
           <BtnDiv>
-          <BotaoDialog>Salvar</BotaoDialog>
-          <BotaoDialog>Limpar</BotaoDialog>
+          <BotaoDialog type="submit">Salvar</BotaoDialog>
+          <BotaoDialog type="button" onClick={limpar}>Limpar</BotaoDialog>
           </BtnDiv>
         </StyledForm>
     )

@@ -24,6 +24,7 @@ const StyledSection = styled.section`
     row-gap: 60px;
     column-gap: 20px;
     font-family: "SourceSans";
+    font-size:20px;
     h3 {
       width: 100%;
       font-size: 36px;
@@ -33,19 +34,61 @@ const StyledSection = styled.section`
       align-content: center;
     }
   }
+  @media(max-width:1280px){
+    h1{
+      font-size:40px;
+    }
+    p{
+      font-size:15px;
+    }
+    form{
+      max-width:90lvw;
+      margin: 60px auto;
+      input{
+        max-width:470px;
+      }
+    }
+  }
+  @media (max-width:768px){
+    form{
+      max-width:330px;
+      flex-direction:column;
+      align-items: center;
+      input{
+        width:330px;
+      }
+      textarea{
+        width:330px
+      }
+      select{
+        width:330px;
+      }
+    }
+  }
 `;
 const Titulo = styled.div`
   text-align: center;
   margin: 70px auto 48px auto;
+  @media (max-width:768px) {
+    padding:0 20px;
+    h1{
+      margin-bottom: 10px;
+    }
+  }
 `;
 
 const NovoVideoForm = () => {
-  const { inputs, errors, aoMudar, aoLimpar, aoSalvar } = useVideoContext();
+  const { form1, aoSalvar } = useVideoContext();
 
   const aoSubmit = (e) => {
     e.preventDefault();
-    aoSalvar()
+    aoSalvar(form1)
   };
+
+  const limpar = (e)=>{
+    e.preventDefault();
+    form1.aoLimpar();
+  }
 
   return (
     <StyledSection>
@@ -60,26 +103,26 @@ const NovoVideoForm = () => {
           name="titulo"
           type="text"
           placeholder="Digite seu título"
-          width="470px"
-          onChange={aoMudar}
-          value={inputs.titulo}
-          erros={errors.titulo}
+          width="38lvw"
+          onChange={form1.aoMudar}
+          value={form1.inputs.titulo}
+          erros={form1.errors.titulo}
         />
         <CampoSelect
-          onChange={aoMudar}
+          onChange={form1.aoMudar}
           name="select"
-          value={inputs.select}
-          erros={errors.select}
+          value={form1.inputs.select}
+          erros={form1.errors.select}
         />
         <Campo
           label="Imagem"
           name="imagem"
           type="url"
           placeholder="Digite o link da imagem"
-          width="39lvw"
-          onChange={aoMudar}
-          value={inputs.imagem}
-          erros={errors.imagem}
+          width="38lvw"
+          onChange={form1.aoMudar}
+          value={form1.inputs.imagem}
+          erros={form1.errors.imagem}
         />
         <Campo
           label="Vídeo"
@@ -87,18 +130,18 @@ const NovoVideoForm = () => {
           type="url"
           placeholder="Digite o link do vídeo"
           width="38lvw"
-          onChange={aoMudar}
-          value={inputs.video}
-          erros={errors.video}
+          onChange={form1.aoMudar}
+          value={form1.inputs.video}
+          erros={form1.errors.video}
         />
         <CampoTextArea
-          onChange={aoMudar}
+          onChange={form1.aoMudar}
           name="descri"
-          value={inputs.descri}
-          erros={errors.descri}
+          value={form1.inputs.descri}
+          erros={form1.errors.descri}
         />
         <BotaoForm onClick={aoSubmit}>Salvar</BotaoForm>
-        <BotaoForm onClick={aoLimpar}>Limpar</BotaoForm>
+        <BotaoForm onClick={limpar}>Limpar</BotaoForm>
       </form>
     </StyledSection>
   );

@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useFormState } from '../hooks';
+import { validateForm1,validateForm2 } from '../utils';
 
 const VideoContext = createContext();
 
@@ -6,16 +8,25 @@ export const useVideoContext = () => useContext(VideoContext);
 
 export const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
-  const [inputs, setInputs] = useState({
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [editarVideo,setEditarVideo] = useState(null)
+  const initialForm1State = {
     titulo: '',
     imagem: '',
     video: '',
     select: '',
     descri: ''
-  });
+  };
+  const initialForm2State = {
+    titulo: '',
+    imagem: '',
+    video: '',
+    select: '',
+    descri: ''
+  };
 
-  const [errors, setErrors] = useState({});
-  const [selectedVideo, setSelectedVideo] = useState(null);
+  const form1 = useFormState(initialForm1State, validateForm1)
+  const form2 = useFormState(initialForm2State, validateForm2)
 
   const fetchVideos = async () => {
     try {
@@ -31,64 +42,22 @@ export const VideoProvider = ({ children }) => {
     fetchVideos();
   }, []);
 
-  const aoMudar = (e) => {
-    const { name, value } = e.target;
-    setInputs((prevInputs) => ({ ...prevInputs, [name]: value }));
-  };
-
-  const validate = () => {
-    let validationErrors = {};
-
-    if (!inputs.titulo) validationErrors.titulo = 'Título é obrigatório';
-
-    if (!inputs.imagem) {
-      validationErrors.imagem = 'Link da imagem é obrigatório';
-    } else if (isValidURL(inputs.imagem)) {
-        inputs.imagem = '';
-      validationErrors.imagem = 'Link da imagem é inválido';
+  useEffect(() => {
+    if (editarVideo) {
+      form2.aoLimpar(); // Limpar erros ao selecionar um novo vídeo
+      form2.setInputs({
+        titulo: editarVideo.titulo || '',
+        imagem: editarVideo.imagem || '',
+        video: editarVideo.video || '',
+        select: editarVideo.select || '',
+        descri: editarVideo.descri || ''
+      });
     }
+  }, [editarVideo]);
 
-    if (!inputs.video) {
-      validationErrors.video = 'Link do vídeo é obrigatório';
-    } else if (isValidURL(inputs.video)) {
-        inputs.video = '';
-      validationErrors.video = 'Link do vídeo é inválido';
-    }
 
-    if (!inputs.select) validationErrors.select = 'Categoria é obrigatória';
-    if (!inputs.descri) validationErrors.descri = 'Descrição é obrigatória';
-
-    setErrors(validationErrors);
-
-    return Object.keys(validationErrors).length === 0;
-  };
-
-  const isValidURL = (str) => {
-    const pattern = new RegExp(
-      '^(https?:\\/\\/)?' + // protocolo
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // nome do domínio
-      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OU endereço IP (v4)
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // porta e caminho
-      '(\\?[;&a-z\\d%_.~+=-]*)?' + // string de consulta
-      '(\\#[-a-z\\d_]*)?$', 'i' // fragmento localizador
-    );
-    return !!pattern.test(str);
-  };
-
-  const aoLimpar = (e) => {
-    e.preventDefault();
-    setInputs({
-      titulo: '',
-      imagem: '',
-      video: '',
-      select: '',
-      descri: ''
-    });
-    setErrors({});
-  };
-
-  const aoSalvar = async () => {
-    const isValid = validate();
+  const aoSalvar = async (form) => {
+    const isValid = form.aoValidar();
     if (isValid) {
       try {
         const response = await fetch('http://localhost:3000/videos', {
@@ -96,19 +65,12 @@ export const VideoProvider = ({ children }) => {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(inputs)
+          body: JSON.stringify(form.inputs)
         });
         if (response.ok) {
           console.log('Dados salvos com sucesso!');
           fetchVideos();
-          setInputs({
-            titulo: '',
-            imagem: '',
-            video: '',
-            select: '',
-            descri: ''
-          });
-          setErrors({});
+          form.aoLimpar();
         } else {
           console.error('Erro ao salvar os dados:', response.statusText);
         }
@@ -118,13 +80,59 @@ export const VideoProvider = ({ children }) => {
     }
   };
 
+  const atualizarVideo = async (form) => {
+    const isValid = form.aoValidar();
+    if (isValid) {
+      try {
+        const response = await fetch(`http://localhost:3000/videos/${editarVideo.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(form.inputs)
+        });
+        if (response.ok) {
+          console.log('Vídeo atualizado com sucesso!');
+          fetchVideos();
+          form.aoLimpar();
+          setEditarVideo(null); // Resetar editarVideo após salvar
+        } else {
+          console.error('Erro ao atualizar o vídeo:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Erro ao atualizar o vídeo:', error);
+      }
+    }
+  };
+
+
+  const aoDeletar = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/videos/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setVideos((prevVideos) => prevVideos.filter((video) => video.id !== id));
+        console.log('Vídeo deletado com sucesso!');
+      } else {
+        console.error('Erro ao deletar vídeo:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Erro ao deletar vídeo:', error);
+    }
+  };
+
   const selecionarVideo = (video) => { 
     setSelectedVideo(video);
   };
 
+  const editarVideoSelecionado = (video) => {
+    setEditarVideo(video)
+  }
+
   return (
     <VideoContext.Provider
-      value={{ inputs, errors, aoMudar, aoLimpar, aoSalvar, videos, selectedVideo, selecionarVideo }}
+      value={{ form1, form2, aoSalvar, videos, selectedVideo, selecionarVideo, editarVideoSelecionado,editarVideo, aoDeletar, atualizarVideo }}
     >
       {children}
     </VideoContext.Provider>

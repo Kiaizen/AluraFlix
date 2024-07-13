@@ -13,6 +13,9 @@ const Tags = styled.h1`
     font-size: ${props=> props.$fs};
     font-weight:900;
     margin-bottom: 40px;
+    @media (max-width:768px) {
+        font-size:24px;
+    }
 `
 
 const Tag = ({children, color, width, fs}) => {
