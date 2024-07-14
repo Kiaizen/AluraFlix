@@ -49,8 +49,6 @@ const StyledDiv = styled.div`
     display: flex;
     justify-content: end;
 `
-
-
 const StyledDialog = styled.dialog`
   background-color: rgba(3, 18, 47, 1);
   width: 70lvw;
@@ -76,6 +74,17 @@ const StyledDialog = styled.dialog`
     width:370px;
   }
 `;
+const DivStyled = styled.div`
+  position:relative;
+  &::before{
+    content:"";
+    position:absolute;
+    inset:0px;
+    z-index:2;
+    box-shadow: inset 0 0 17px 8px ${props => props.$color};
+  }
+`;
+
 
 const Card = ({ video, color }) => {
   const { selecionarVideo, editarVideoSelecionado, aoDeletar } = useVideoContext();
@@ -89,7 +98,9 @@ const Card = ({ video, color }) => {
   }
   return (
     <StyledFigure>
+      <DivStyled $color={color}>
       <StyledImg $color={color} src={video.imagem} alt={video.titulo} onClick={()=>selecionarVideo(video)}/>
+      </DivStyled>
       <StyledFigcaption $color={color}>
         <StyledButton onClick={deletarVideo}>
           <img src="/Lixeira.png" alt="Lixeira" />
