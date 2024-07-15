@@ -1,8 +1,4 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/server.js" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
   "builds": [
     {
       "src": "package.json",
@@ -12,11 +8,15 @@
       }
     },
     {
-      "src": "server.js",
+      "src": "api/server.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": ["db.json"]
       }
     }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/server.js" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
