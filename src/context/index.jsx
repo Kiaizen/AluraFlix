@@ -30,7 +30,7 @@ export const VideoProvider = ({ children }) => {
 
   const fetchVideos = async () => {
     try {
-      const response = await fetch('http://localhost:8080/videos');
+      const response = await fetch('http://localhost:8080/api/videos');
       const data = await response.json();
       setVideos(data);
     } catch (error) {
@@ -60,7 +60,7 @@ export const VideoProvider = ({ children }) => {
     const isValid = form.aoValidar();
     if (isValid) {
       try {
-        const response = await fetch('http://localhost:8080/videos', {
+        const response = await fetch('http://localhost:8080/api/videos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ export const VideoProvider = ({ children }) => {
     const isValid = form.aoValidar();
     if (isValid) {
       try {
-        const response = await fetch(`http://localhost:8080/videos/${editarVideo.id}`, {
+        const response = await fetch(`http://localhost:8080/api/videos/${editarVideo.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -108,7 +108,7 @@ export const VideoProvider = ({ children }) => {
 
   const aoDeletar = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/videos/${id}`, {
+      const response = await fetch(`http://localhost:8080/api/videos/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
