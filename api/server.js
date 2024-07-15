@@ -12,7 +12,7 @@ server.use(middlewares);
 // Servir arquivos estáticos da pasta 'public'
 server.use(
   jsonServer.rewriter({
-    "/*":"/$1",
+    "/api/*":"/$1",
   })
 );
 
