@@ -13,7 +13,6 @@ const StyledImg = styled.img`
   border-radius: 4px 4px 0 0;
   box-sizing: border-box;
   box-shadow: inset 0 0 17px 8px ${(props) => props.$color};
-  cursor:pointer;
   @media (max-width:768px) {
     width:370px;
   }
@@ -80,8 +79,9 @@ const DivStyled = styled.div`
     content:"";
     position:absolute;
     inset:0px;
-    z-index:2;
+    z-index:1;
     box-shadow: inset 0 0 17px 8px ${props => props.$color};
+    cursor:pointer;
   }
 `;
 
@@ -98,8 +98,8 @@ const Card = ({ video, color }) => {
   }
   return (
     <StyledFigure>
-      <DivStyled $color={color}>
-      <StyledImg $color={color} src={video.imagem} alt={video.titulo} onClick={()=>selecionarVideo(video)}/>
+      <DivStyled $color={color} onClick={()=>selecionarVideo(video)}>
+      <StyledImg $color={color} src={video.imagem} alt={video.titulo} />
       </DivStyled>
       <StyledFigcaption $color={color}>
         <StyledButton onClick={deletarVideo}>
