@@ -1,22 +1,27 @@
-const path = require('path');
 const jsonServer = require('json-server');
-const express = require('express');
-const app = express();
+const server = jsonServer.create()
+const router = jsonServer.router('db.json');
+
 
 // Middlewares do json-server
-const router = jsonServer.router(path.join(__dirname, '..', 'db.json'));
 const middlewares = jsonServer.defaults();
 
 // Usar middlewares do json-server
-app.use(middlewares);
+server.use(middlewares);
 
 // Servir arquivos estáticos da pasta 'public'
-app.use(express.static(path.join(__dirname, '..', 'public')));
+server.use(
+  jsonServer.rewriter({
+    "/*":"/$1",
+  })
+);
 
 // Usar o router do json-server
-app.use('/api', router);
+server.use(router);
 
 // Iniciar o servidor
-app.listen(3000, () => {
+server.listen(3000, () => {
   console.log('JSON Server is running');
 });
+
+module.exports = server;
