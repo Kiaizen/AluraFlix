@@ -56,20 +56,15 @@ const DivStyled = styled.div`
     content:"";
     position:absolute;
     inset:-5px;
-    z-index:2;
+    z-index:-1;
     box-shadow: inset 0 0 17px 8px ${props => props.$color};
-  }
-  iframe{
-    position:absolute;
-    top:0;
-    left:0;
   }
 `;
 
 const DivVideo = styled.div`
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -2;
   position: absolute;
 `;
 
