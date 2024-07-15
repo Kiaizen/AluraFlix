@@ -5,7 +5,7 @@
   "type": "module",
   "main": "api/server.js",
   "scripts": {
-    "start": "vite",
+    "start": "node api/server.js",
     "dev": "vite",
     "build": " vite build",
     "deploy": "vercel deploy --prod",
