@@ -10,7 +10,7 @@ const router = jsonServer.router(join(__dirname, '../db.json'));
 const middlewares = jsonServer.defaults();
 
 server.use(middlewares);
-server.use(router);
+server.use('/api',router);
 
 server.use(jsonServer.rewriter({
   '/api/*': '/$1'
