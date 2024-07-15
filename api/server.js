@@ -1,27 +1,16 @@
 import jsonServer from "json-server";
-const server = jsonServer.create()
-const router = jsonServer.router('db.json');
+import db from "./db.json";
 
-
-// Middlewares do json-server
+const server = jsonServer.create();
+const router = jsonServer.router(db);
 const middlewares = jsonServer.defaults();
 
-// Usar middlewares do json-server
 server.use(middlewares);
+server.use('/api', router);
 
-// Servir arquivos estáticos da pasta 'public'
-server.use(
-  jsonServer.rewriter({
-    "/api/*":"/$1",
-  })
-);
-
-// Usar o router do json-server
-server.use(router);
-
-// Iniciar o servidor
-server.listen(3000, () => {
-  console.log('JSON Server is running');
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`JSON Server is running on port ${PORT}`);
 });
 
 export default server;
