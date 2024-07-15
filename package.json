@@ -8,6 +8,7 @@
     "start": "node api/server.js",
     "dev": "vite",
     "build": "vite build",
+    "vercel-build": "node api/server.js",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
