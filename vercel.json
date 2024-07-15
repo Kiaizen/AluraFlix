@@ -2,6 +2,13 @@
   "version": 2,
   "builds": [
     {
+      "src": "index.html",
+      "use": "@vercel/static-build",
+      "config": {
+        "includeFiles": ["db.json", "api/**/*"]
+      }
+    },
+    {
       "src": "api/server.js",
       "use": "@vercel/node",
       "config": {
@@ -11,8 +18,12 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/api/(.*)",
       "dest": "api/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "index.html"
     }
   ]
 }
